@@ -1,4 +1,4 @@
-package frc.robot.Utils;
+package frc.robot.Utils.pure_pursuite;
 
 public class PurePursuit {
     private int lastClosestPoint;

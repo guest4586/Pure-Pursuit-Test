@@ -1,4 +1,4 @@
-package frc.robot.Utils;
+package frc.robot.Utils.pure_pursuite;
 
 import java.util.ArrayList;
 public class Path extends ArrayList<Waypoint> {

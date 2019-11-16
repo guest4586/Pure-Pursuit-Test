@@ -22,10 +22,10 @@ public class PurePursuit {
         return path[closest];
     }
 
-    public Vector getLookaheadPoint(Vector robotPos, double lookaheadDistance, Waypoint[] path){
+    public Vector getLookaheadPoint(Vector robotPos, double lookaheadDistance, Path path){
         Vector lookaheadPoint = null; double lookaheadindex = 0;
-        for(int i = (int)lastLookaheadindex; i < path.length-1; i++){
-            Vector E = path[i]; Vector L = path[i+1];
+        for(int i = (int)lastLookaheadindex; i < path.size()-1; i++){
+            Vector E = path.get(i); Vector L = path.get(i+1);
             Vector d = Vector.subtract(L, E);
             Vector f = Vector.subtract(E, robotPos);
             double a = Vector.dot(d, d); double b = 2*(Vector.dot(d, f)); double c = Vector.dot(f, f) - (lookaheadDistance*lookaheadDistance);

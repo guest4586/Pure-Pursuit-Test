@@ -11,7 +11,13 @@ public class PIDController {
     private double setPoint;
     private double CurrentPos;
     private double OutPut;
-
+    public Runnable run = new Runnable(){
+    
+        @Override
+        public void run() {
+            
+        }
+    };
     private double I;
 
 

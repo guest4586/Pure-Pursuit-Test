@@ -1,9 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
 
@@ -16,9 +10,9 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
-import frc.robot.Utils.Odometry;
-import frc.robot.Utils.Vector;
+import frc.robot.Utils.pure_pursuite.*;
 import frc.robot.commands.DriveArcade;
 
 /**
@@ -28,7 +22,7 @@ public class DriveTrain extends Subsystem {
   //the robot it self 
   private WPI_TalonSRX leftLeader;
   private WPI_TalonSRX rightLeader;
-
+  
   
   private WPI_VictorSPX leftFollower;
   private WPI_VictorSPX rightFollower;
@@ -84,7 +78,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public int getRightEncoderPosition(){
-    return this.rightLeader.getSelectedSensorPosition();
+    return -this.rightLeader.getSelectedSensorPosition();
   }
 
   public double getGyro(){
@@ -99,13 +93,27 @@ public class DriveTrain extends Subsystem {
     this.leftLeader.setSelectedSensorPosition(0);
     this.rightLeader.setSelectedSensorPosition(0);
     lastL = 0;lastR = 0;
+    resetGyro(); 
+    
+  }
+  public void resetGyro(){
+    this.Gyro.reset();
   }
   public void UpdateOdometry(){
     int deltaR,deltaL;
     deltaL = getLeftEncoderPosition() - this.lastL;
     deltaR = getRightEncoderPosition() - this.lastR;
-
-    this.position.UpdateRobotPosition(deltaL, deltaR, getAngle());
+    this.lastL = getLeftEncoderPosition();
+    this.lastR = getRightEncoderPosition();
+    
+    this.position.UpdateRobotPosition((double)deltaL, (double)deltaR, getAngle());
+    SmartDashboard.putNumber("X",this.position.x);
+    SmartDashboard.putNumber("Y",this.position.y);
+    
+  }
+  
+  public double encoderToMeters(int in){
+    return 0.152*Math.PI*in/8196;
   }
 
   public Vector getRobotOdometry(){

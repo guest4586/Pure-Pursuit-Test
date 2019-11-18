@@ -7,47 +7,27 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.OI;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveArcade extends Command {
-  private DriveTrain m_DriveTrain;
-  private Joystick Input;
-
-  private double rot,speed;
-  public DriveArcade() {
-    this.m_DriveTrain = DriveTrain.getInstance();
-    requires(this.m_DriveTrain);
-    Input = OI.driverJoystick;
-    
+public class ResetOdometry extends Command {
+  DriveTrain m_driver;
+  public ResetOdometry() {
+    m_driver = DriveTrain.getInstance();
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    m_driver.resetOdometry();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    this.rot = this.Input.getRawAxis(4)*SmartDashboard.getNumber("Max speed",0.7);
-    this.speed = this.Input.getRawAxis(1)*SmartDashboard.getNumber("Max speed",0.7);
-    SmartDashboard.putNumber("speed", this.speed);
-
-    if(speed < 0.2 && speed > -0.2){
-      speed = 0;
-    }
-    if(rot < 0.2 && rot > -0.2){
-      rot = 0;
-    }
-    m_DriveTrain.ArcadeDrive(rot, speed);
-    this.m_DriveTrain.UpdateOdometry();
   }
-
-  
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

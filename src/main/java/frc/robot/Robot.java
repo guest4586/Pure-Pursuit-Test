@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Utils.Path;
-import frc.robot.Utils.Waypoint;
+import frc.robot.Utils.pure_pursuite.*;
 import frc.robot.subsystems.DriveTrain;
 public class Robot extends TimedRobot {
   public static OI m_oi;

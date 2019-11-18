@@ -7,11 +7,16 @@ public class Odometry extends Vector {
        super(x, y); 
     }
     
+  public double encoderToMeters(double in){
+    return 0.152*Math.PI*in/8196;
+  }
+    
     public void UpdateRobotPosition(double changeL, double changeR, double robotAngle)
     {
-        double dis = (changeL + changeR)/ 2;
-        this.x += dis * Math.cos(robotAngle);
-        this.y += dis * Math.sin(robotAngle);
+        double angle = Math.toRadians(robotAngle);
+        double dis = encoderToMeters((changeL + changeR)/ 2);
+        this.x += dis * Math.cos(angle);
+        this.y += dis * Math.sin(angle);
     }
     public Vector getRobotPosition(){
         return new Vector(this);

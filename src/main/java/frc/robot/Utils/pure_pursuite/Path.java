@@ -45,7 +45,7 @@ public class Path extends ArrayList<Waypoint> {
 
         while(change >= tolerance){
             change = 0;
-            for(int i = 1;i< this.size();i++){
+            for(int i = 1;i< this.size()-1;i++){
                 aux =  this.get(i).x;
                 SmoothedPath.get(i).x += weightData*(this.get(i).x - SmoothedPath.get(i).x) +
                 weightSmooth*(SmoothedPath.get(i-1).x + SmoothedPath.get(i+1).x - 2*this.get(i).x);
@@ -61,9 +61,10 @@ public class Path extends ArrayList<Waypoint> {
         }
 
         this.clear();
-        this.addAll(this);
+        this.addAll(SmoothedPath);
         return true;
     }
+
 
     
     public void initPath(Waypoint[] waypoints){

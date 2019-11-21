@@ -37,10 +37,10 @@ public class DriveArcade extends Command {
     this.speed = this.Input.getRawAxis(1)*SmartDashboard.getNumber("Max speed",0.7);
     SmartDashboard.putNumber("speed", this.speed);
 
-    if(speed < 0.2 && speed > -0.2){
+    if(Math.abs(speed)<=0.2){
       speed = 0;
     }
-    if(rot < 0.2 && rot > -0.2){
+    if(Math.abs(rot)<=0.2){
       rot = 0;
     }
     m_DriveTrain.ArcadeDrive(rot, speed);

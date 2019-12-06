@@ -1,12 +1,23 @@
 package frc.robot.Utils.pure_pursuite;
 
 import java.util.ArrayList;
+
+import frc.robot.Utils.Constants;
 public class Path extends ArrayList<Waypoint> {
 
     private double spacing, tolerance;
     public Path(double spacing,double tolerance){
         this.spacing = spacing;
         this.tolerance = tolerance;
+    }
+
+    public Waypoint[] getPathArray(){
+        Waypoint[] path = new Waypoint[this.size()];
+
+        for(int i = 0; i < this.size(); i++){
+            path[i] = this.get(i);
+        }
+        return path;
     }
 
     public boolean InjectPoints(){
@@ -25,7 +36,7 @@ public class Path extends ArrayList<Waypoint> {
             while(j < distance){
                 newPath.add(new Waypoint(this.get(i).x + j/distance*(this.get(i+1).x - this.get(i).x) 
                     ,this.get(i).y + j/distance*(this.get(i+1).y - this.get(i).y)
-                    ));
+                    , 0));
                 j += this.spacing;
             }
         }
@@ -45,7 +56,7 @@ public class Path extends ArrayList<Waypoint> {
 
         while(change >= tolerance){
             change = 0;
-            for(int i = 1;i< this.size()-1;i++){
+            for(int i = 1;i< this.size();i++){
                 aux =  this.get(i).x;
                 SmoothedPath.get(i).x += weightData*(this.get(i).x - SmoothedPath.get(i).x) +
                 weightSmooth*(SmoothedPath.get(i-1).x + SmoothedPath.get(i+1).x - 2*this.get(i).x);
@@ -61,15 +72,23 @@ public class Path extends ArrayList<Waypoint> {
         }
 
         this.clear();
-        this.addAll(SmoothedPath);
+        this.addAll(this);
         return true;
     }
-
 
     
     public void initPath(Waypoint[] waypoints){
       for(Waypoint p : waypoints){
         this.add(p);
       }
+    }
+
+    public void initPath(Waypoint[] waypoints, boolean smoothAndInject){
+        for(Waypoint p : waypoints){
+            this.add(p);
+          }
+        if(smoothAndInject){
+            SmoothPoints(Constants.weightData, Constants.weightSmooth);
+        }
     }
 }

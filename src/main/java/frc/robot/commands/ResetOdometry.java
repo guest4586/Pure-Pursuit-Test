@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
 public class ResetOdometry extends Command {
@@ -22,6 +23,7 @@ public class ResetOdometry extends Command {
   @Override
   protected void initialize() {
     m_driver.resetOdometry();
+    Robot.controller.resetPurePursuit();
   }
 
   // Called repeatedly when this Command is scheduled to run

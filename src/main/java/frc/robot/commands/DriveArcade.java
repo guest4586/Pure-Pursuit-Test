@@ -34,16 +34,22 @@ public class DriveArcade extends Command {
   @Override
   protected void execute() {
     this.rot = this.Input.getRawAxis(4)*SmartDashboard.getNumber("Max speed",0.7);
-    this.speed = this.Input.getRawAxis(1)*SmartDashboard.getNumber("Max speed",0.7);
+    this.speed = this.Input.getRawAxis(1)*SmartDashboard.getNumber("Max speed",1);
     SmartDashboard.putNumber("speed", this.speed);
 
-    if(Math.abs(speed)<=0.2){
+    if(speed < 0.2 && speed > -0.2){
       speed = 0;
     }
-    if(Math.abs(rot)<=0.2){
+    if(rot < 0.2 && rot > -0.2){
       rot = 0;
     }
-    m_DriveTrain.ArcadeDrive(rot, speed);
+    System.out.println(this.speed);
+    if(speed>0)
+    // m_DriveTrain.diffDrive.curvatureDrive(-speed, rot*0.2, false);
+    m_DriveTrain.diffDrive.arcadeDrive(-speed, rot);
+    
+    else
+    m_DriveTrain.diffDrive.curvatureDrive(-speed, rot, true);
     this.m_DriveTrain.UpdateOdometry();
   }
 

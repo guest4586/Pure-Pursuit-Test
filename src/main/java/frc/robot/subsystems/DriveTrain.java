@@ -1,7 +1,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.Utils.pure_pursuite.*;
 import frc.robot.commands.DriveArcade;
@@ -20,8 +23,8 @@ import frc.robot.commands.DriveArcade;
  */
 public class DriveTrain extends Subsystem {
   //the robot it self 
-  private WPI_TalonSRX leftLeader;
-  private WPI_TalonSRX rightLeader;
+  public WPI_TalonSRX leftLeader;
+  public WPI_TalonSRX rightLeader;
   
   
   private WPI_VictorSPX leftFollower;
@@ -30,7 +33,7 @@ public class DriveTrain extends Subsystem {
   private SpeedControllerGroup leftController;
   private SpeedControllerGroup rightController;
   
-  private  DifferentialDrive diffDrive;
+  public  DifferentialDrive diffDrive;
 
   private AHRS Gyro;
 
@@ -61,7 +64,7 @@ public class DriveTrain extends Subsystem {
     this.leftController = new SpeedControllerGroup(this.leftLeader,this.leftFollower);
     this.rightController = new SpeedControllerGroup(this.rightLeader,this.rightFollower);
 
-    this.diffDrive = new DifferentialDrive(this.leftController,this.rightController);
+    // this.diffDrive = new DifferentialDrive(this.leftController,this.rightController);
 
     this.Gyro = new AHRS(SPI.Port.kMXP);
 
@@ -72,6 +75,13 @@ public class DriveTrain extends Subsystem {
 
     // this is were the real code starts.
   }
+
+  public double getRightEncoderVelocityInM(){return this.rightLeader.getSelectedSensorVelocity()*0.0005829;}
+  public double getLeftEncoderVelocityInM(){return this.leftLeader.getSelectedSensorVelocity()*0.0005829;}
+
+  public double getRightEncoderVelocity(){return this.rightLeader.getSelectedSensorVelocity();}
+  public double getLeftEncoderVelocity(){return this.leftLeader.getSelectedSensorVelocity();}
+
 
   public int getLeftEncoderPosition(){
     return this.leftLeader.getSelectedSensorPosition();
@@ -85,7 +95,21 @@ public class DriveTrain extends Subsystem {
     return this.Gyro.getAngle();
   }
 
+  public double getLeftPO(){return this.leftLeader.get();}
 
+  public void setLPO(double demand){
+    this.leftLeader.set(ControlMode.PercentOutput, demand);
+  }
+
+  public void setRPO(double demand){
+    this.rightLeader.set(ControlMode.PercentOutput, demand);
+  }
+
+
+  @Override
+  public void periodic() {
+   
+  }
 
 
   public void resetOdometry(){
@@ -94,6 +118,7 @@ public class DriveTrain extends Subsystem {
     this.rightLeader.setSelectedSensorPosition(0);
     lastL = 0;lastR = 0;
     resetGyro(); 
+    
     
   }
   public void resetGyro(){
@@ -109,6 +134,9 @@ public class DriveTrain extends Subsystem {
     this.position.UpdateRobotPosition((double)deltaL, (double)deltaR, getAngle());
     SmartDashboard.putNumber("X",this.position.x);
     SmartDashboard.putNumber("Y",this.position.y);
+    Robot.x.setDouble(this.position.x);
+    Robot.y.setDouble(this.position.y);
+    Robot.angle.setDouble(getAngle());
     
   }
   
@@ -122,7 +150,7 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new DriveArcade());
+    // setDefaultCommand(new DriveArcade());
   }
 
   public double getAngle(){

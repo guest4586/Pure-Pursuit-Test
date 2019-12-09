@@ -9,13 +9,14 @@ import frc.robot.Utils.pure_pursuite.Waypoint;
 import frc.robot.subsystems.DriveTrain;
 
 public class run extends Command {
-  Waypoint[] path;
-  DriveTrain driver;
-  PurePursuit pp;
+  private Waypoint[] path;
+  private DriveTrain driver;
+  private PurePursuit pp;
+  private double lookDistance = 0.1;
   public run(Waypoint[] path) {
     this.path = path;
-    driver = DriveTrain.getInstance();
-    pp = new PurePursuit(this.path);
+    this.driver = DriveTrain.getInstance();
+    this.pp = new PurePursuit(this.path,this.lookDistance);
   }
 
   @Override
@@ -23,18 +24,18 @@ public class run extends Command {
     driver.resetOdometry();
     driver.setLPO(0);
     driver.setRPO(0);
-
   }
 
   @Override
   protected void execute() {
     driver.UpdateOdometry();
+    double angle = driver.getAngle();
     Vector position = driver.getRobotOdometry();
     Waypoint closest = pp.getClosestPoint(this.path, position);
-    Vector look = pp.getLookaheadPoint2(position, 0.1, this.path);
+    Vector look = pp.getLookaheadPoint(position,this.path);
 
     double sc = pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
-    double curv = pp.getCurv(look, .1);
+    double curv = pp.getCurvature(angle,position, look);
     double ls = pp.getLeftTargetVelocity(closest, curv, 0.55);
     double rs = pp.getRightTargetVelocity(closest, curv, 0.55);
     SmartDashboard.putNumber("gyro", driver.getAngle());

@@ -108,7 +108,8 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void periodic() {
-   
+    SmartDashboard.putNumber("left posi", this.getLeftEncoderPosition());
+    SmartDashboard.putNumber("right posi", this.getRightEncoderPosition());
   }
 
 

@@ -8,7 +8,7 @@ public class Odometry extends Vector {
     }
     
   public double encoderToMeters(double in){
-    return 0.152*Math.PI*in/8196;
+    return (0.1524*Math.PI*in)/8192;
   }
     
     public void UpdateRobotPosition(double changeL, double changeR, double robotAngle)

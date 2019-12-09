@@ -2,8 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.PIDVelocityControlR;
-import frc.robot.commands.PIDVelocityLR;
 import frc.robot.commands.run;
 
 public class OI {

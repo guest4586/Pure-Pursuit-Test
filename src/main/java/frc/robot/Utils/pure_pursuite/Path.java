@@ -3,6 +3,7 @@ package frc.robot.Utils.pure_pursuite;
 import java.util.ArrayList;
 
 import frc.robot.Utils.Constants;
+
 public class Path extends ArrayList<Waypoint> {
 
     private double spacing, tolerance;

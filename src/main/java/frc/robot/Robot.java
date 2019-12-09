@@ -16,12 +16,15 @@ public class Robot extends TimedRobot {
   public static PurePursuit controller;
   public static NetworkTable table;
   public static NetworkTableEntry x, y, angle;
+  
+  
   public static Waypoint[] waypoints = {
-    new Waypoint(0.0,0.0,3.5),
-    new Waypoint(1, 0,69.5),
-    new Waypoint(2, 0,540)
+    new Waypoint(0.0,0.0,0.5),
+    new Waypoint(0.5, 0,0.7),
+    new Waypoint(1, 0,0.5)
 
   };
+
   @Override
   public void robotInit() {
     m_Driver = DriveTrain.getInstance();
@@ -31,7 +34,7 @@ public class Robot extends TimedRobot {
     x = table.getEntry("x"); 
     y = table.getEntry("y"); 
     angle = table.getEntry("angle");
-    controller = new PurePursuit(waypoints); 
+    controller = new PurePursuit(waypoints,0.1); 
   }
 
   @Override

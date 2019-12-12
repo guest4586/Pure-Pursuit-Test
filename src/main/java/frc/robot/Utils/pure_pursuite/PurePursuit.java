@@ -42,12 +42,11 @@ public class PurePursuit {
      * @return the path curvature
      */
     public double getCurvature(double RobotAngle,Vector pos,Vector look){
-        
+        RobotAngle = Math.toRadians(RobotAngle);
         Vector delta = Vector.subtract(look,pos);
         double Beta = delta.getAngle(),angle = RobotAngle - Beta;
 
-        Vector relitveVector = new Vector(Math.cos(Math.toRadians(angle))*this.lookDistance,Math.sin(Math.toRadians(angle))*this.lookDistance);
-
+        Vector relitveVector = new Vector(Math.cos(angle)*this.lookDistance,Math.sin(angle)*this.lookDistance);
         return relitveVector.y/Math.pow(this.lookDistance,2);
     }
 

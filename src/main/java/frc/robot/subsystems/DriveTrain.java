@@ -92,7 +92,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyro(){
-    return this.Gyro.getAngle();
+    return -this.Gyro.getAngle();
   }
 
   public double getLeftPO(){return this.leftLeader.get();}
@@ -110,6 +110,9 @@ public class DriveTrain extends Subsystem {
   public void periodic() {
     SmartDashboard.putNumber("left posi", this.getLeftEncoderPosition());
     SmartDashboard.putNumber("right posi", this.getRightEncoderPosition());
+    SmartDashboard.putNumber("X pos",this.position.x);
+    SmartDashboard.putNumber("Y pos",this.position.y);
+    SmartDashboard.putNumber("gyro",getAngle());    
   }
 
 
@@ -125,6 +128,7 @@ public class DriveTrain extends Subsystem {
   public void resetGyro(){
     this.Gyro.reset();
   }
+
   public void UpdateOdometry(){
     int deltaR,deltaL;
     deltaL = getLeftEncoderPosition() - this.lastL;
@@ -133,8 +137,6 @@ public class DriveTrain extends Subsystem {
     this.lastR = getRightEncoderPosition();
     
     this.position.UpdateRobotPosition((double)deltaL, (double)deltaR, getAngle());
-    SmartDashboard.putNumber("X",this.position.x);
-    SmartDashboard.putNumber("Y",this.position.y);
     Robot.x.setDouble(this.position.x);
     Robot.y.setDouble(this.position.y);
     Robot.angle.setDouble(getAngle());
@@ -155,7 +157,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getAngle(){
-    return this.Gyro.getAngle();
+    return -this.Gyro.getAngle();
   }
 
   public void ArcadeDrive(final double rotation, final double speed){

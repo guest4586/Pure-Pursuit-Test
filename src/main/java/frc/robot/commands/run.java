@@ -12,17 +12,17 @@ public class run extends Command {
   private Waypoint[] path;
   private DriveTrain driver;
   private PurePursuit pp;
-  private double lookDistance = 0.1;
+  private double lookDistance = 0.3;
   public run(Waypoint[] path) {
     this.path = path;
     this.driver = DriveTrain.getInstance();
-    this.pp = new PurePursuit(this.path,this.lookDistance);
   }
 
   @Override
   protected void initialize() {
     driver.resetOdometry();
     driver.setLPO(0);
+    this.pp = new PurePursuit(this.path,this.lookDistance);
     driver.setRPO(0);
   }
 
@@ -34,10 +34,10 @@ public class run extends Command {
     Waypoint closest = pp.getClosestPoint(this.path, position);
     Vector look = pp.getLookaheadPoint(position,this.path);
 
-    double sc = pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
-    double curv = pp.getCurvature(angle,position, look);
-    double ls = pp.getLeftTargetVelocity(closest, curv, 0.55);
-    double rs = pp.getRightTargetVelocity(closest, curv, 0.55);
+    double curv = pp.getCurvature(angle,position, look);   
+    double sc = curv*pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
+    double ls = pp.getLeftTargetVelocity(closest, sc, 0.55);
+    double rs = pp.getRightTargetVelocity(closest, sc, 0.55);
     SmartDashboard.putNumber("gyro", driver.getAngle());
     SmartDashboard.putNumber("curv", sc);
     SmartDashboard.putNumber("LS", ls);

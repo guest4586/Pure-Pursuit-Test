@@ -1,5 +1,9 @@
 package frc.robot.Utils.pure_pursuite;
 
+import org.opencv.core.Mat;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class PurePursuit {
     private double lookDistance;
     private int lastClosestPoint;
@@ -42,12 +46,20 @@ public class PurePursuit {
      * @return the path curvature
      */
     public double getCurvature(double RobotAngle,Vector pos,Vector look){
+        // double a = -Math.tan(Math.toRadians(RobotAngle));
+        // double b = 1;
+        // double c = ((-a)*pos.x)-pos.y;
+        
+        // double x = Math.abs((a*look.x)+(b*look.y)+c)/Math.sqrt((a*a)+(b*b));
+        
+        // double curv = (2*x)/(lookDistance*lookDistance);
+        // return curv;
         RobotAngle = Math.toRadians(RobotAngle);
         Vector delta = Vector.subtract(look,pos);
-        double Beta = delta.getAngle(),angle = RobotAngle - Beta;
-
-        Vector relitveVector = new Vector(Math.cos(angle)*this.lookDistance,Math.sin(angle)*this.lookDistance);
-        return relitveVector.y/Math.pow(this.lookDistance,2);
+        double beta = delta.getAngle(),toAngle = beta - RobotAngle;
+        Vector relitiVector = new Vector();
+        relitiVector = Vector.toCartesian(this.lookDistance, toAngle);
+        return (2*relitiVector.y)/Math.pow(this.lookDistance,2);
     }
 
     public double geteLeftDesiredVelocity(double targetV, double curveture, double TRACK_WIDTH){

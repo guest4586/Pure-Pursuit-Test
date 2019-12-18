@@ -7,7 +7,8 @@ public class Vector {
     public Vector() {
         this.x = 0;
         this.y = 0;
-     }
+    }
+
 
     public Vector(double x, double y) {
         this.x = x;

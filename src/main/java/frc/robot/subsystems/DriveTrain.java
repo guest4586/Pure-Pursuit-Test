@@ -90,9 +90,16 @@ public class DriveTrain extends Subsystem {
   public int getRightEncoderPosition(){
     return -this.rightLeader.getSelectedSensorPosition();
   }
-
-  public double getGyro(){
-    return -this.Gyro.getAngle();
+  public void setLeftSpeed(double speed){
+    if(Math.abs(speed)<0.2)
+      this.leftLeader.set(speed);
+  }
+  public void setRightSpeed(double speed){
+    if(Math.abs(speed)<0.2)
+      this.rightLeader.set(speed);
+  }
+  public double getAngle(){
+    return this.Gyro.getAngle();
   }
 
   public double getLeftPO(){return this.leftLeader.get();}
@@ -154,10 +161,6 @@ public class DriveTrain extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // setDefaultCommand(new DriveArcade());
-  }
-
-  public double getAngle(){
-    return -this.Gyro.getAngle();
   }
 
   public void ArcadeDrive(final double rotation, final double speed){

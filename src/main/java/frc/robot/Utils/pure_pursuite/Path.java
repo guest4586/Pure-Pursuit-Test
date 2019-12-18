@@ -6,10 +6,11 @@ import frc.robot.Utils.Constants;
 
 public class Path extends ArrayList<Waypoint> {
 
-    private double spacing, tolerance;
-    public Path(double spacing,double tolerance){
+    private double spacing, tolerance, maxVal;
+    public Path(double spacing,double tolerance,double maxVal){
         this.spacing = spacing;
         this.tolerance = tolerance;
+        this.maxVal = maxVal;
     }
 
     public Waypoint[] getPathArray(){
@@ -20,7 +21,24 @@ public class Path extends ArrayList<Waypoint> {
         }
         return path;
     }
+    public double getCurv(Waypoint p2,Waypoint p1,Waypoint p3){
+        p1.x += 0.0001;
+        double k1 = 0.5*(p1.getLengthSq()-p2.getLengthSq())/(p1.x-p2.x);
+        double k2 = (p1.y-p2.y)/(p1.x-p2.x);
 
+        double b = 0.5*(p2.x*p2.x - 2*p2.x*k1 + p2.y*p2.y - p3.x*p3.x + 2*p3.x*k1-p3.y*p3.y)/(p3.x*k2 - p3.y+p2.y-p2.x*k2);
+        double a = k1 - k2*b;
+        double rad = Math.sqrt(Math.pow(p1.x-a,2)+Math.pow(p1.y-b,2));
+        if(rad > 10000)
+            return 0;
+        return 1/rad;
+    }
+
+    public void addVelocities(double startinVel){
+        for(int i = 1; i< this.size()-1;i++){
+            this.get(i).velocity = getCurv(this.get(i-1),this.get(i),this.get(i+1));
+        }
+    }
     public boolean InjectPoints(){
         if(this.isEmpty())
             return false;

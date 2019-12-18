@@ -35,7 +35,7 @@ public class run extends Command {
     Vector look = pp.getLookaheadPoint(position,this.path);
 
     double curv = pp.getCurvature(angle,position, look);   
-    double sc = curv*pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
+    double sc = Math.abs(curv)*pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
     double ls = pp.getLeftTargetVelocity(closest, sc, 0.55);
     double rs = pp.getRightTargetVelocity(closest, sc, 0.55);
     SmartDashboard.putNumber("gyro", driver.getAngle());

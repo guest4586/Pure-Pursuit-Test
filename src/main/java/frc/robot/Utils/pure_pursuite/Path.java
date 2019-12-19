@@ -13,6 +13,14 @@ public class Path extends ArrayList<Waypoint> {
         this.maxVal = maxVal;
     }
 
+    public Waypoint[] toArray(){
+        Waypoint[] path = new Waypoint[this.size()];
+        for(int i = 0; i< this.size();i++){
+            path[i] = this.get(i);
+        }
+        return path;
+    }
+
     public double getCurv(Waypoint p2,Waypoint p1,Waypoint p3){
         p1.x += 0.0001;
         double k1 = 0.5*(p1.getLengthSq()-p2.getLengthSq())/(p1.x-p2.x);
@@ -64,7 +72,7 @@ public class Path extends ArrayList<Waypoint> {
         if(this.isEmpty())
         return false;
 
-        Path SmoothedPath = new Path(this.spacing,this.tolerance);
+        Path SmoothedPath = new Path(this.spacing,this.tolerance,this.maxVal);
         SmoothedPath.addAll(this);
 
 
@@ -102,9 +110,8 @@ public class Path extends ArrayList<Waypoint> {
     public void initPath(Waypoint[] waypoints, boolean smoothAndInject){
         for(Waypoint p : waypoints){
             this.add(p);
-          }
-        if(smoothAndInject){
-            SmoothPoints(Constants.weightData, Constants.weightSmooth);
-        }
+        if(smoothAndInject)
+            SmoothPoints(Constants.WEIGHT_DATA, Constants.WEIGHT_SMOOTH);
+        
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.Utils.pure_pursuite;
 
+import java.util.ArrayList;
+
 import org.opencv.core.Mat;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,33 +11,33 @@ public class PurePursuit {
     private int lastClosestPoint;
     public double lastLookaheadindex;
     private Vector lastLookaheadPoint;
-    private Waypoint[] path;
+    private ArrayList<Waypoint> path;
 
-    public PurePursuit(Waypoint[] path,double lookDis){
+    public PurePursuit(ArrayList<Waypoint> path,double lookDis){
         this.lookDistance = lookDis;
         this.path = path;
         this.lastClosestPoint = 0;
         this.lastLookaheadindex = 0;
-        this.lastLookaheadPoint = path[0];
+        this.lastLookaheadPoint = path.get(0);
     }
     public void resetPurePursuit(){
         this.lastClosestPoint = 0;
         this.lastLookaheadindex = 0;
-        this.lastLookaheadPoint = path[0];
+        this.lastLookaheadPoint = path.get(0);
     }
 
-    public Waypoint getClosestPoint(Waypoint[] path, Vector robotPos){
+    public Waypoint getClosestPoint(Vector robotPos){
         int closest = lastClosestPoint + 1;
+        int length = path.size();
+        if(lastClosestPoint >= length -1) {
+             return path.get(length-1);}
 
-        if(lastClosestPoint >= path.length -1) {
-             return path[path.length-1];}
-
-        for(int i = lastClosestPoint; i < path.length; i++){
-            if(robotPos.distance(path[i])< robotPos.distance(path[closest])) closest = i;
+        for(int i = lastClosestPoint; i < path.size(); i++){
+            if(robotPos.distance(path.get(i))< robotPos.distance(path.get(closest))) closest = i;
         }
 
         this.lastClosestPoint = closest;
-        return path[closest];
+        return path.get(closest);
     }
 
 
@@ -76,14 +78,15 @@ public class PurePursuit {
      * @param path
      * @return the look ahead point
      */
-    public Vector getLookaheadPoint(Vector pos,Waypoint[] path) {
+    public Vector getLookaheadPoint(Vector pos) {
         Vector lookahead = null;
         double length;
+        int size = path.size();
         // iterate through all pairs of points
-        for (int i = 0; i < path.length - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             // form a segment from each two adjacent points
-            Vector E = path[i];
-            Vector L = path[i + 1];
+            Vector E = path.get(i);
+            Vector L = path.get(i + 1);
 
             Vector d = Vector.subtract(L,E);
             Vector f = Vector.subtract(E,pos);

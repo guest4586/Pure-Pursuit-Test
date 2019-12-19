@@ -85,8 +85,8 @@ public class PurePursuit {
             Vector E = path[i];
             Vector L = path[i + 1];
 
-            Vector d = new Vector(L); d.subtract(E);
-            Vector f = new Vector(E); f.subtract(pos);
+            Vector d = Vector.subtract(L,E);
+            Vector f = Vector.subtract(E,pos);
             length = d.getLength();
             double a = d.dot(d);
             double b = 2*f.dot(d);

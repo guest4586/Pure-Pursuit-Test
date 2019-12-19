@@ -13,14 +13,6 @@ public class Path extends ArrayList<Waypoint> {
         this.maxVal = maxVal;
     }
 
-    public Waypoint[] getPathArray(){
-        Waypoint[] path = new Waypoint[this.size()];
-
-        for(int i = 0; i < this.size(); i++){
-            path[i] = this.get(i);
-        }
-        return path;
-    }
     public double getCurv(Waypoint p2,Waypoint p1,Waypoint p3){
         p1.x += 0.0001;
         double k1 = 0.5*(p1.getLengthSq()-p2.getLengthSq())/(p1.x-p2.x);
@@ -34,16 +26,21 @@ public class Path extends ArrayList<Waypoint> {
         return 1/rad;
     }
 
-    public void addVelocities(double startinVel){
+    public void addVelocities(double velConst){
+        this.get(0).velocity = this.maxVal;
+        double curve;
         for(int i = 1; i< this.size()-1;i++){
-            this.get(i).velocity = getCurv(this.get(i-1),this.get(i),this.get(i+1));
+            curve = getCurv(this.get(i-1),this.get(i),this.get(i+1));
+            this.get(i).velocity = Math.min(velConst/curve,maxVal);
         }
+        this.get(this.size()-1).velocity = 0;
     }
+
     public boolean InjectPoints(){
         if(this.isEmpty())
             return false;
         
-        Path newPath = new Path(this.spacing,this.tolerance);
+        Path newPath = new Path(this.spacing,this.tolerance,this.maxVal);
         double distance = 0;
         int j;
 

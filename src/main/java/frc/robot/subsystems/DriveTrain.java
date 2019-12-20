@@ -56,10 +56,10 @@ public class DriveTrain extends Subsystem {
     this.leftFollower.follow(this.leftLeader);
     this.rightFollower.follow(this.rightLeader);
 
-    this.leftLeader.setNeutralMode(NeutralMode.Brake);
-    this.rightLeader.setNeutralMode(NeutralMode.Brake);
-    this.leftFollower.setNeutralMode(NeutralMode.Brake);
-    this.rightFollower.setNeutralMode(NeutralMode.Brake);
+    // this.leftLeader.setNeutralMode(NeutralMode.Brake);
+    // this.rightLeader.setNeutralMode(NeutralMode.Brake);
+    // this.leftFollower.setNeutralMode(NeutralMode.Brake);
+    // this.rightFollower.setNeutralMode(NeutralMode.Brake);
 
     this.leftController = new SpeedControllerGroup(this.leftLeader,this.leftFollower);
     this.rightController = new SpeedControllerGroup(this.rightLeader,this.rightFollower);

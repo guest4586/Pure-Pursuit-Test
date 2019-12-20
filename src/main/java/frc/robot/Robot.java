@@ -20,8 +20,11 @@ public class Robot extends TimedRobot {
   
   
   public static Waypoint[] waypoints = {
-    new Waypoint(0,0,0.3),
-    new Waypoint(1,1,0.3)
+    new Waypoint(0,0,1.5),
+    new Waypoint(0.8, 0, 1.5),
+    new Waypoint(1.6,-0.4,1.5),
+    new Waypoint(2.8,0,1.3),
+    new Waypoint(3.5, 0,0)
   };
 
   @Override
@@ -36,7 +39,7 @@ public class Robot extends TimedRobot {
     angle = table.getEntry("angle");
     controller = new PurePursuit(path,0.1); 
     m_oi = new OI();
-
+    SmartDashboard.putNumber("setSpeed",0);
   }
 
   @Override

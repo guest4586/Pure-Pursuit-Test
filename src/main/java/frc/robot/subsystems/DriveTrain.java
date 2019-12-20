@@ -56,10 +56,10 @@ public class DriveTrain extends Subsystem {
     this.leftFollower.follow(this.leftLeader);
     this.rightFollower.follow(this.rightLeader);
 
-    // this.leftLeader.setNeutralMode(NeutralMode.Brake);
-    // this.rightLeader.setNeutralMode(NeutralMode.Brake);
-    // this.leftFollower.setNeutralMode(NeutralMode.Brake);
-    // this.rightFollower.setNeutralMode(NeutralMode.Brake);
+    this.leftLeader.setNeutralMode(NeutralMode.Brake);
+    this.rightLeader.setNeutralMode(NeutralMode.Brake);
+    this.leftFollower.setNeutralMode(NeutralMode.Brake);
+    this.rightFollower.setNeutralMode(NeutralMode.Brake);
 
     this.leftController = new SpeedControllerGroup(this.leftLeader,this.leftFollower);
     this.rightController = new SpeedControllerGroup(this.rightLeader,this.rightFollower);
@@ -115,8 +115,8 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("left posi", this.getLeftEncoderPosition());
-    SmartDashboard.putNumber("right posi", this.getRightEncoderPosition());
+    SmartDashboard.putNumber("left vel", this.getLeftEncoderVelocity()*(0.0005829/4));
+      SmartDashboard.putNumber("right vel", this.getRightEncoderVelocity()*(0.0005829/4));
     SmartDashboard.putNumber("X pos",this.position.x);
     SmartDashboard.putNumber("Y pos",this.position.y);
     SmartDashboard.putNumber("gyro",getAngle());    

@@ -13,7 +13,7 @@ public class PIDVelocityControlR extends Command {
   public PIDVelocityControlR(double in) {
     driver = DriveTrain.getInstance();
     requires(driver);
-    demand = in/0.0005829;
+    demand = in/(0.0005829/4);
 
     driver.rightLeader.config_kP(0,.8);
     driver.rightLeader.config_kI(0, 0.0025);
@@ -29,8 +29,8 @@ public class PIDVelocityControlR extends Command {
 
   @Override
   protected void execute() {
-    driver.rightLeader.set(ControlMode.Velocity, -SmartDashboard.getNumber("setPoint", .3)/0.0005829);
-    driver.leftLeader.set(ControlMode.Velocity, SmartDashboard.getNumber("setPoint", .3)/0.0005829);
+    driver.rightLeader.set(ControlMode.Velocity, -SmartDashboard.getNumber("setPoint", .3)/0.0005829/4);
+    driver.leftLeader.set(ControlMode.Velocity, SmartDashboard.getNumber("setPoint", .3)/0.0005829/4);
     
 
 

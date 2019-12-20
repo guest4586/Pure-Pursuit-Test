@@ -10,26 +10,22 @@ import frc.robot.Utils.pure_pursuite.Waypoint;
 import frc.robot.subsystems.DriveTrain;
 
 public class run extends Command {
-  private Waypoint[] path1 = {
-    new Waypoint(0,0),
-    new Waypoint(1,1)
-  };
   private Path path;
   private DriveTrain driver;
   private PurePursuit pp;
   private double lookDistance = 0.3;
-  public run() {
+  public run(Waypoint[] path) {
     this.path = new Path(0.5,3,2);
+    this.path.initPath(path);
     this.driver = DriveTrain.getInstance();
   }
 
   @Override
   protected void initialize() {
-    this.path.initPath(path1);
-    this.path.addVelocities(5);
+    this.path.addVelocities();
     driver.resetOdometry();
     driver.setLPO(0);
-    this.pp = new PurePursuit(this.path.toArray(),this.lookDistance);
+    this.pp = new PurePursuit(this.path);
     driver.setRPO(0);
   }
 
@@ -38,10 +34,10 @@ public class run extends Command {
     driver.UpdateOdometry();
     double angle = driver.getAngle();
     Vector position = driver.getRobotOdometry();
-    Waypoint closest = pp.getClosestPoint(this.path.toArray(), position);
-    Vector look = pp.getLookaheadPoint(position,this.path.toArray());
+    Waypoint closest = pp.getClosestPoint();
+    Vector look = pp.getLookaheadPoint();
 
-    double curv = pp.getCurvature(angle,position, look);   
+    double curv = pp.getCurvature(angle, look);   
     // double sc = Math.abs(curv)*pp.getSignesCurvature(look, Math.toRadians(driver.getAngle()), position);
     // double ls = pp.getLeftTargetVelocity(closest, sc, 0.55);
     // double rs = pp.getRightTargetVelocity(closest, sc, 0.55);

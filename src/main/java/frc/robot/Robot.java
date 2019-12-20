@@ -18,24 +18,17 @@ public class Robot extends TimedRobot {
   public static NetworkTableEntry x, y, angle;
   
   
-  public static Waypoint[] waypoints = {
-    new Waypoint(0, 0,0.3),
-
-    new Waypoint(1, 1,0.3)
-  };
 
   @Override
   public void robotInit() {
     m_Driver = DriveTrain.getInstance();
     m_oi = new OI();
-    odometry = new Odometry(0,0);
+    odometry = Odometry.getInstance();
     table = NetworkTableInstance.getDefault().getTable("odometry");
     x = table.getEntry("x"); 
     y = table.getEntry("y"); 
     angle = table.getEntry("angle");
-    controller = new PurePursuit(waypoints,0.1); 
   }
-
   @Override
   public void robotPeriodic() {
   }
@@ -48,16 +41,6 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
   }
-
-  public void initPath(Waypoint[] waypoints){
-  
-  
-  
-  }
-
-
-  
-
   @Override
   public void autonomousInit() {
   }
@@ -76,7 +59,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-      }
+    }
 
 
 }

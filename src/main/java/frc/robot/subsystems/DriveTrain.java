@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -41,7 +43,9 @@ public class DriveTrain extends Subsystem {
   private int lastR,lastL;
   private Odometry position;
 
-  
+  private NetworkTable Table;
+  private NetworkTableInstance NetInst;
+
 
   private static DriveTrain Instance;
   private DriveTrain(){
@@ -67,12 +71,10 @@ public class DriveTrain extends Subsystem {
     // this.diffDrive = new DifferentialDrive(this.leftController,this.rightController);
 
     this.Gyro = new AHRS(SPI.Port.kMXP);
-
+    position = Odometry.getInstance();
     Instance = null;
-
-    this.resetOdometry();
-    
-
+    this.NetInst = NetworkTableInstance.getDefault();
+    this.Table = NetInst.getTable("DriveTrain");
     // this is were the real code starts.
   }
 
@@ -115,22 +117,20 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("left posi", this.getLeftEncoderPosition());
-    SmartDashboard.putNumber("right posi", this.getRightEncoderPosition());
-    SmartDashboard.putNumber("X pos",this.position.x);
-    SmartDashboard.putNumber("Y pos",this.position.y);
-    SmartDashboard.putNumber("gyro",getAngle());    
+    this.Table..putNumber("left posi", this.getLeftEncoderPosition());
+    this.Table..putNumber("right posi", this.getRightEncoderPosition());
+    this.Table..putNumber("X pos",this.position.x);
+    this.Table..putNumber("Y pos",this.position.y);
+    this.Table..putNumber("gyro",getAngle());    
   }
 
 
   public void resetOdometry(){
-    this.position = new Odometry(0,0);
+    this.position.Reset();
     this.leftLeader.setSelectedSensorPosition(0);
     this.rightLeader.setSelectedSensorPosition(0);
     lastL = 0;lastR = 0;
     resetGyro(); 
-    
-    
   }
   public void resetGyro(){
     this.Gyro.reset();

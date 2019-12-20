@@ -6,11 +6,11 @@ import frc.robot.Utils.Constants;
 
 public class Path extends ArrayList<Waypoint> {
 
-    private double spacing, tolerance, maxVal;
-    public Path(double spacing,double tolerance,double maxVal){
-        this.spacing = spacing;
-        this.tolerance = tolerance;
-        this.maxVal = maxVal;
+    private double spacing, tolerance, maxVel;
+    public Path(double spacing,double tolerance,double maxVel){
+        this.spacing = Constants.SPACING;
+        this.tolerance = Constants.TOLERANCE;
+        this.maxVel = Constants.MAX_VELOCITY;
     }
 
     public Waypoint[] toArray(){
@@ -34,12 +34,12 @@ public class Path extends ArrayList<Waypoint> {
         return 1/rad;
     }
 
-    public void addVelocities(double velConst){
-        this.get(0).velocity = this.maxVal;
+    public void addVelocities(){
+        this.get(0).velocity = this.maxVel;
         double curve;
         for(int i = 1; i< this.size()-1;i++){
             curve = getCurv(this.get(i-1),this.get(i),this.get(i+1));
-            this.get(i).velocity = Math.min(velConst/curve,maxVal);
+            this.get(i).velocity = Math.min(Constants.VELOCITY_CONST/curve,maxVel);
         }
         this.get(this.size()-1).velocity = 0;
     }
@@ -48,7 +48,7 @@ public class Path extends ArrayList<Waypoint> {
         if(this.isEmpty())
             return false;
         
-        Path newPath = new Path(this.spacing,this.tolerance,this.maxVal);
+        Path newPath = new Path(this.spacing,this.tolerance,this.maxVel);
         double distance = 0;
         int j;
 
@@ -72,13 +72,13 @@ public class Path extends ArrayList<Waypoint> {
         if(this.isEmpty())
         return false;
 
-        Path SmoothedPath = new Path(this.spacing,this.tolerance,this.maxVal);
+        Path SmoothedPath = new Path(this.spacing,this.tolerance,this.maxVel);
         SmoothedPath.addAll(this);
 
 
-        double change = tolerance,aux;
+        double change = this.tolerance,aux;
 
-        while(change >= tolerance){
+        while(change >= this.tolerance){
             change = 0;
             for(int i = 1;i< this.size();i++){
                 aux =  this.get(i).x;
@@ -102,16 +102,8 @@ public class Path extends ArrayList<Waypoint> {
 
     
     public void initPath(Waypoint[] waypoints){
-      for(Waypoint p : waypoints){
-        this.add(p);
-      }
-    }
-
-    public void initPath(Waypoint[] waypoints, boolean smoothAndInject){
-        for(Waypoint p : waypoints){
-            this.add(p);
-        if(smoothAndInject)
-            SmoothPoints(Constants.WEIGHT_DATA, Constants.WEIGHT_SMOOTH);
-        
+        this.clear();
+        for(Waypoint p : waypoints)
+          this.add(p);
     }
 }

@@ -48,14 +48,6 @@ public class PurePursuit {
      * @return the path curvature
      */
     public double getCurvature(double RobotAngle,Vector pos,Vector look){
-        // double a = -Math.tan(Math.toRadians(RobotAngle));
-        // double b = 1;
-        // double c = ((-a)*pos.x)-pos.y;
-        
-        // double x = Math.abs((a*look.x)+(b*look.y)+c)/Math.sqrt((a*a)+(b*b));
-        
-        // double curv = (2*x)/(lookDistance*lookDistance);
-        // return curv;
         RobotAngle = Math.toRadians(RobotAngle);
         Vector delta = Vector.subtract(look,pos);
         double beta = delta.getAngle(),toAngle = beta - RobotAngle;
@@ -117,7 +109,7 @@ public class PurePursuit {
             }
         }
 
-        if(lookahead == null) lookahead = (Vector)path[0];
+        if(lookahead == null) lookahead = (Vector)path.get(0);
         return lookahead;
 
     }

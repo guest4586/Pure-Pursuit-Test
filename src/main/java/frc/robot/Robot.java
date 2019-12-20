@@ -11,6 +11,7 @@ import frc.robot.subsystems.DriveTrain;
 
 public class Robot extends TimedRobot {
   public OI m_oi;
+  public static Path path;
   public DriveTrain m_Driver;
   public Odometry odometry;
   public static PurePursuit controller;
@@ -20,20 +21,22 @@ public class Robot extends TimedRobot {
   
   public static Waypoint[] waypoints = {
     new Waypoint(0, 0,0.3),
-
     new Waypoint(1, 1,0.3)
   };
 
   @Override
   public void robotInit() {
     m_Driver = DriveTrain.getInstance();
-    m_oi = new OI();
     odometry = new Odometry(0,0);
     table = NetworkTableInstance.getDefault().getTable("odometry");
     x = table.getEntry("x"); 
-    y = table.getEntry("y"); 
+    y = table.getEntry("y");
+    path = new Path(0.1,0,5);
+    path.initPath(waypoints); 
     angle = table.getEntry("angle");
-    controller = new PurePursuit(waypoints,0.1); 
+    controller = new PurePursuit(path,0.1); 
+    m_oi = new OI();
+
   }
 
   @Override

@@ -10,6 +10,6 @@ public class OI {
   public OI(){
     driverJoystick = new Joystick(0);
     x = new JoystickButton(driverJoystick, 3);
-    x.whileHeld(new run(Robot.waypoints));
+    x.whileHeld(new run(Robot.path));
   }
 }

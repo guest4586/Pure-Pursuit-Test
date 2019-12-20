@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -46,8 +47,15 @@ public class DriveTrain extends Subsystem {
   private NetworkTable Table;
   private NetworkTableInstance NetInst;
 
+  private NetworkTableEntry Xpos;
+  private NetworkTableEntry Ypos;
+  private NetworkTableEntry RightEncoder;
+  private NetworkTableEntry LeftEncoder;
+  private NetworkTableEntry Angle;
 
   private static DriveTrain Instance;
+
+
   private DriveTrain(){
     super("DriverTrain");
     // initalize everything
@@ -68,14 +76,22 @@ public class DriveTrain extends Subsystem {
     this.leftController = new SpeedControllerGroup(this.leftLeader,this.leftFollower);
     this.rightController = new SpeedControllerGroup(this.rightLeader,this.rightFollower);
 
-    // this.diffDrive = new DifferentialDrive(this.leftController,this.rightController);
+    this.diffDrive = new DifferentialDrive(this.leftController,this.rightController);
 
     this.Gyro = new AHRS(SPI.Port.kMXP);
     position = Odometry.getInstance();
     Instance = null;
+
+    // Network Table init
     this.NetInst = NetworkTableInstance.getDefault();
     this.Table = NetInst.getTable("DriveTrain");
-    // this is were the real code starts.
+  
+    this.LeftEncoder = this.Table.getEntry("Left encoder");
+    this.RightEncoder = this.Table.getEntry("Right encoder");
+    this.Xpos = this.Table.getEntry("X pos");
+    this.Ypos = this.Table.getEntry("Y pos");
+    this.Angle = this.Table.getEntry("gyro Angle");    
+  
   }
 
   public double getRightEncoderVelocityInM(){return this.rightLeader.getSelectedSensorVelocity()*0.0005829;}
@@ -117,11 +133,11 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void periodic() {
-    this.Table..putNumber("left posi", this.getLeftEncoderPosition());
-    this.Table..putNumber("right posi", this.getRightEncoderPosition());
-    this.Table..putNumber("X pos",this.position.x);
-    this.Table..putNumber("Y pos",this.position.y);
-    this.Table..putNumber("gyro",getAngle());    
+    this.Xpos.setNumber(this.position.x);
+    this.Ypos.setNumber(this.position.y);
+    this.RightEncoder.setNumber(getRightEncoderPosition());
+    this.LeftEncoder.setNumber(getLeftEncoderPosition());
+    this.Angle.setNumber(getAngle());
   }
 
 
@@ -164,7 +180,12 @@ public class DriveTrain extends Subsystem {
   }
 
   public void ArcadeDrive(final double rotation, final double speed){
-    this.diffDrive.arcadeDrive(-speed, rotation);
+    if(Math.abs(speed) > 0.2|| Math.abs(rotation)>0.2)
+      this.diffDrive.arcadeDrive(-speed, rotation);
+  }
+  public void CurvatureDrive(double rotation, double speed){
+    if(Math.abs(speed) > 0.2|| Math.abs(rotation)>0.2)
+      this.diffDrive.curvatureDrive(-speed, rotation);
   }
 
   

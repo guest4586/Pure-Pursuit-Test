@@ -22,12 +22,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_Driver = DriveTrain.getInstance();
-    m_oi = new OI();
     odometry = Odometry.getInstance();
     table = NetworkTableInstance.getDefault().getTable("odometry");
     x = table.getEntry("x"); 
     y = table.getEntry("y"); 
     angle = table.getEntry("angle");
+    m_oi = new OI();
   }
   @Override
   public void robotPeriodic() {

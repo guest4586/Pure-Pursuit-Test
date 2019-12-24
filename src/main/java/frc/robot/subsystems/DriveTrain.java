@@ -176,16 +176,26 @@ public class DriveTrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    // setDefaultCommand(new DriveArcade());
+    setDefaultCommand(new DriveArcade());
   }
 
-  public void ArcadeDrive(final double rotation, final double speed){
-    if(Math.abs(speed) > 0.2|| Math.abs(rotation)>0.2)
-      this.diffDrive.arcadeDrive(-speed, rotation);
+  public void ArcadeDrive( double rotation,  double speed){
+    if(Math.abs(rotation)<0.2)
+      rotation =0;
+    if(Math.abs(speed)<0.2)
+      speed =0;
+    diffDrive.arcadeDrive(speed, rotation);
   }
   public void CurvatureDrive(double rotation, double speed){
-    if(Math.abs(speed) > 0.2|| Math.abs(rotation)>0.2)
-      this.diffDrive.curvatureDrive(-speed, rotation);
+    if(Math.abs(rotation)<0.2)
+      rotation =0;
+    if(Math.abs(speed)<0.2)
+      speed =0;
+
+    if(speed<0.6)
+      this.diffDrive.curvatureDrive(-speed, rotation,true);
+    else
+      this.diffDrive.curvatureDrive(-speed, rotation, false);
   }
 
   

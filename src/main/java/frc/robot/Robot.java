@@ -20,8 +20,7 @@ public class Robot extends TimedRobot {
   
   
   public static Waypoint[] waypoints = {
-    new Waypoint(0,0,1.5),
-    new Waypoint(0.8, 0, 1.5),
+
     new Waypoint(1.6,-0.4,1.5),
     new Waypoint(2.8,0,1.3),
     new Waypoint(3.5, 0,0)
